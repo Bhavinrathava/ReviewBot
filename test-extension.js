@@ -4,10 +4,13 @@ const path = require('path');
 console.log('Testing VS Code Extension...');
 console.log('Current directory:', __dirname);
 console.log('Extension path:', path.resolve(__dirname));
+console.log('Sample project path:', path.resolve(__dirname, 'sample-project'));
 
-// Try to launch VS Code with extension development path
+// Try to launch VS Code with extension development path and sample project
+const sampleProjectPath = path.resolve(__dirname, 'sample-project');
 const vscode = spawn('code', [
     '--extensionDevelopmentPath=' + path.resolve(__dirname),
+    sampleProjectPath,
     '--new-window',
     '--wait'
 ], {

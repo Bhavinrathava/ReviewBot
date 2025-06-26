@@ -1,14 +1,34 @@
 {
   "name": "velocityReview",
   "displayName": "Velocity",
-  "description": "Pre-Flight Check for Pull requests, backed by LLMs",
+  "description": "AI-powered code review extension that analyzes git commits using OpenAI GPT-4 or custom LLM endpoints. Features commit selection, dual API modes, and comprehensive review generation.",
   "version": "0.0.1",
+  "publisher": "velocity-review",
   "engines": {
     "vscode": "^1.101.0"
   },
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "code-review",
+    "ai",
+    "git",
+    "openai",
+    "gpt-4",
+    "productivity",
+    "development",
+    "automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/velocity-review/velocity-review.git"
+  },
+  "homepage": "https://github.com/velocity-review/velocity-review",
+  "bugs": {
+    "url": "https://github.com/velocity-review/velocity-review/issues"
+  },
+  "license": "MIT",
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -23,6 +43,21 @@
         "command": "velocityReview.refreshSidebar",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "velocityReview.startReview",
+        "title": "Start Review",
+        "icon": "$(play)"
+      },
+      {
+        "command": "velocityReview.openConfig",
+        "title": "Configure URL",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "velocityReview.exportChanges",
+        "title": "Export Changes as JSON",
+        "icon": "$(export)"
       }
     ],
     "views": {
@@ -49,8 +84,44 @@
           "command": "velocityReview.refreshSidebar",
           "when": "view == velocityReviewSidebar",
           "group": "navigation"
+        },
+        {
+          "command": "velocityReview.startReview",
+          "when": "view == velocityReviewSidebar",
+          "group": "navigation@2"
+        },
+        {
+          "command": "velocityReview.openConfig",
+          "when": "view == velocityReviewSidebar",
+          "group": "navigation@3"
+        },
+        {
+          "command": "velocityReview.exportChanges",
+          "when": "view == velocityReviewSidebar",
+          "group": "navigation@4"
         }
       ]
+    },
+    "configuration": {
+      "title": "Velocity Review",
+      "properties": {
+        "velocityReview.apiMode": {
+          "type": "string",
+          "enum": ["openai", "custom"],
+          "default": "openai",
+          "description": "API mode: 'openai' for direct OpenAI integration, 'custom' for custom URL"
+        },
+        "velocityReview.apiUrl": {
+          "type": "string",
+          "default": "https://api.openai.com/v1/chat/completions",
+          "description": "Custom API URL (used when apiMode is 'custom')"
+        },
+        "velocityReview.openaiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API Key for direct OpenAI integration"
+        }
+      }
     }
   },
   "scripts": {
@@ -70,6 +141,8 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/node-fetch": "^2.6.12",
+    "@types/nunjucks": "^3.2.6",
     "@types/vscode": "^1.101.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
@@ -81,6 +154,8 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "node-fetch": "^3.3.2",
+    "nunjucks": "^3.2.4",
     "simple-git": "^3.28.0"
   }
 }
